@@ -108,6 +108,7 @@ const Layout = (props) => {
                     <option value="B">B</option>
                     <option value="C">C</option>
                     <option value="D">D</option>
+                    <option value="sum">sum</option>
                 </select>
             </div>
         )
@@ -138,11 +139,16 @@ const Layout = (props) => {
                     {carData.map((car, index) => {
                         return (
                             <div key={index}>
-                                {regionFilter === car.region || modelFilter === car.model ?
+                                {regionFilter === 'All' && modelFilter === 'All' ?
                                     PrintCarData(car)
-                                    : regionFilter === 'All' && modelFilter === 'All' ?
+                                    : regionFilter === car.region && modelFilter === 'All' ?
                                         PrintCarData(car)
-                                        : null}
+                                        : regionFilter === car.region && modelFilter === car.model ?
+                                            PrintCarData(car)
+                                            : regionFilter === 'All' && modelFilter === car.model ?
+                                                PrintCarData(car)
+                                                : null
+                                }
                             </div>
                         )
                     }
