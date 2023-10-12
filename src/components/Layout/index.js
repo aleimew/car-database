@@ -79,7 +79,8 @@ const Layout = (props) => {
                     <div className='database_piece'>{
                         region === 'US' ? usSum :
                             region === 'EU' ? euSum :
-                                caSum}</div>
+                                caSum}
+                    </div>
                 </div>
             )
         }
@@ -118,8 +119,25 @@ const Layout = (props) => {
         )
     }
 
+    const FilterResults = (car) => {
+        return (
+            <div>
+                {regionFilter === 'All' && modelFilter === 'All' ?
+                    PrintCarData(car)
+                    : regionFilter === car.region && modelFilter === 'All' ?
+                        PrintCarData(car)
+                        : regionFilter === car.region && modelFilter === car.model ?
+                            PrintCarData(car)
+                            : regionFilter === 'All' && modelFilter === car.model ?
+                                PrintCarData(car)
+                                : null
+                }
+            </div>
+        );
+    }
+
     return (
-        <div>
+        <div className="layout_component">
             <div className="database_box">
                 CAR DATABASE #1
                 {PrintDataNames()}
@@ -144,16 +162,7 @@ const Layout = (props) => {
                     {props.data.map((car, index) => {
                         return (
                             <div key={index}>
-                                {regionFilter === 'All' && modelFilter === 'All' ?
-                                    PrintCarData(car)
-                                    : regionFilter === car.region && modelFilter === 'All' ?
-                                        PrintCarData(car)
-                                        : regionFilter === car.region && modelFilter === car.model ?
-                                            PrintCarData(car)
-                                            : regionFilter === 'All' && modelFilter === car.model ?
-                                                PrintCarData(car)
-                                                : null
-                                }
+                                {FilterResults(car)}
                             </div>
                         )
                     }

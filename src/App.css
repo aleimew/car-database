@@ -1,14 +1,25 @@
 .App {
   text-align: center;
   display: flex;
+  flex-direction: column;
+  background-color: aqua;
+  width: auto;
+  height: 100%;
+}
+
+.layout_component {
+  background-color: aqua;
+  min-height: 100vh;
+  display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
 }
 
 .database_box {
   border: 2px solid black;
   width: 20em;
+  background-color: aliceblue;
 }
 
 .database_section {
@@ -22,4 +33,5 @@
   border: 1px solid black;
   width: 50%;
   margin: 5px;
+  background-color: rgb(215, 236, 255);
 }
