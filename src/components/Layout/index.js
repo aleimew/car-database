@@ -3,14 +3,14 @@ import { useState, useEffect } from 'react';
 import { useCallback, useMemo, memo } from 'react';
 
 const Layout = (props) => {
-    const carData = props.data;
-
     const [usSum, setUsSum] = useState(0);
     const [euSum, setEuSum] = useState(0);
     const [caSum, setCaSum] = useState(0);
 
     const [regionFilter, setRegionFilter] = useState('All');
     const [modelFilter, setModelFilter] = useState('All');
+
+    const regionsPrinted = [];
 
     const lengthCutOff = props.data.length + 3;
 
@@ -38,36 +38,14 @@ const Layout = (props) => {
         setUsSum(usFinSum);
         setEuSum(euFinSum);
         setCaSum(caFinSum);
-
-        if (carData.length < lengthCutOff) {
-            carData.push(
-                {
-                    region: 'US',
-                    model: 'sum',
-                    sales: usFinSum,
-                },
-                {
-                    region: 'EU',
-                    model: 'sum',
-                    sales: euFinSum,
-                },
-                {
-                    region: 'CA',
-                    model: 'sum',
-                    sales: caFinSum,
-                }
-            );
-        }
     }, [])
 
     const handleRegionFilter = (e) => {
         setRegionFilter(e.target.value);
-        console.log(regionFilter);
     }
 
     const handleModelFilter = (e) => {
         setModelFilter(e.target.value);
-        console.log(modelFilter);
     }
 
     const PrintDataNames = () => {
@@ -78,6 +56,33 @@ const Layout = (props) => {
                 <p className="database_piece">Sales</p>
             </div>
         )
+    }
+
+    const PrintRegionSum = (region) => {
+        let regionHasBeenPrinted = false;
+
+        if (regionsPrinted.length !== 0) {
+            for (let i = 0; i < regionsPrinted.length; i++) {
+                if (regionsPrinted[i] === region) {
+                    regionHasBeenPrinted = true
+                }
+            }
+        }
+
+        if (!regionHasBeenPrinted) {
+            regionsPrinted.push(region);
+
+            return (
+                <div className="database_section">
+                    <div className='database_piece'>{region}</div>
+                    <div className='database_piece'>sum</div>
+                    <div className='database_piece'>{
+                        region === 'US' ? usSum :
+                            region === 'EU' ? euSum :
+                                caSum}</div>
+                </div>
+            )
+        }
     }
 
     const PrintCarData = (car) => {
@@ -108,7 +113,6 @@ const Layout = (props) => {
                     <option value="B">B</option>
                     <option value="C">C</option>
                     <option value="D">D</option>
-                    <option value="sum">sum</option>
                 </select>
             </div>
         )
@@ -120,9 +124,10 @@ const Layout = (props) => {
                 CAR DATABASE #1
                 {PrintDataNames()}
                 <div>
-                    {carData.map((car, index) => {
+                    {props.data.map((car, index) => {
                         return (
                             <div key={index}>
+                                {PrintRegionSum(car.region)}
                                 {PrintCarData(car)}
                             </div>
                         )
@@ -136,7 +141,7 @@ const Layout = (props) => {
                 {PrintDropDowns()}
                 {PrintDataNames()}
                 <div>
-                    {carData.map((car, index) => {
+                    {props.data.map((car, index) => {
                         return (
                             <div key={index}>
                                 {regionFilter === 'All' && modelFilter === 'All' ?
