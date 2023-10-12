@@ -12,8 +12,6 @@ const Layout = (props) => {
 
     const regionsPrinted = [];
 
-    const lengthCutOff = props.data.length + 3;
-
     useEffect(() => {
         let usFinSum = 0;
         let euFinSum = 0;
