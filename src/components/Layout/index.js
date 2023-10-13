@@ -1,11 +1,13 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { useCallback, useMemo, memo } from 'react';
 
 const Layout = (props) => {
     const [usSum, setUsSum] = useState(0);
     const [euSum, setEuSum] = useState(0);
     const [caSum, setCaSum] = useState(0);
+
+    const regions = [];
+    const models = [];
 
     const [regionFilter, setRegionFilter] = useState('All');
     const [modelFilter, setModelFilter] = useState('All');
@@ -38,6 +40,24 @@ const Layout = (props) => {
         setCaSum(caFinSum);
     }, [])
 
+    useEffect(() => {
+        props.data.forEach((car) => {
+            if (!regions.includes(car.region)) {
+                regions.push(car.region);
+                console.log(regions);
+            }
+        });
+    }, [])
+
+    useEffect(() => {
+        props.data.forEach((car) => {
+            if (!models.includes(car.model)) {
+                models.push(car.model);
+                console.log(models);
+            }
+        });
+    }, [])
+
     const handleRegionFilter = (e) => {
         setRegionFilter(e.target.value);
     }
@@ -54,6 +74,37 @@ const Layout = (props) => {
                 <p className="database_piece">Sales</p>
             </div>
         )
+    }
+
+    const PrintRegions = () => {
+        return (
+            <select onChange={handleRegionFilter}>
+
+                <option value="All">All</option>
+                {/* {regions.map((region, index) => {
+                    return (
+                        <select key={index}>
+                            <option value={region}>{region}</option>
+                        </select>
+                    )
+                })} */}
+                <option value="US">US</option>
+                <option value="EU">EU</option>
+                <option value="CA">CA</option>
+            </select>
+        );
+    }
+
+    const PrintModels = () => {
+        return (
+            <select onChange={handleModelFilter}>
+                <option value="All">All</option>
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+                <option value="D">D</option>
+            </select>
+        );
     }
 
     const PrintRegionSum = (region) => {
@@ -98,21 +149,10 @@ const Layout = (props) => {
         return (
             <div>
                 Region Filter
-                <select onChange={handleRegionFilter}>
-                    <option value="All">All</option>
-                    <option value="US">US</option>
-                    <option value="EU">EU</option>
-                    <option value="CA">CA</option>
-                </select>
+                {PrintRegions()}
 
                 Model Filter
-                <select onChange={handleModelFilter}>
-                    <option value="All">All</option>
-                    <option value="A">A</option>
-                    <option value="B">B</option>
-                    <option value="C">C</option>
-                    <option value="D">D</option>
-                </select>
+                {PrintModels()}
             </div>
         )
     }
